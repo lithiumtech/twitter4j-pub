@@ -17,11 +17,28 @@
 
 package twitter4j;
 
-import twitter4j.api.*;
+import twitter4j.api.DirectMessagesResources;
+import twitter4j.api.FavoritesResources;
+import twitter4j.api.FriendsFollowersResources;
+import twitter4j.api.HelpResources;
+import twitter4j.api.ListsResources;
+import twitter4j.api.PlacesGeoResources;
+import twitter4j.api.SavedSearchesResources;
+import twitter4j.api.SearchResource;
+import twitter4j.api.SpamReportingResource;
+import twitter4j.api.SuggestedUsersResources;
+import twitter4j.api.TimelinesResources;
+import twitter4j.api.TrendsResources;
+import twitter4j.api.TweetsResources;
+import twitter4j.api.UsersResources;
 import twitter4j.auth.Authorization;
 import twitter4j.conf.Configuration;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -768,6 +785,28 @@ class TwitterImpl extends TwitterBaseImpl implements Twitter {
     @Override
     public User showUser(String screenName) throws TwitterException {
         return factory.createUser(get(conf.getRestBaseURL() + "users/show.json?screen_name=" + screenName));
+    }
+
+    protected List<HttpParameter> paramMapToArray(final Map<String, String> params) {
+        final ArrayList<HttpParameter> httpParameters = new ArrayList<HttpParameter>();
+        for (final Map.Entry<String, String> entry : params.entrySet()) {
+            httpParameters.add(new HttpParameter(entry.getKey(), entry.getValue()));
+        }
+        return httpParameters;
+    }
+
+    @Override
+    public User showUserWithParams(long userId, Map<String, String> params) throws TwitterException {
+        final List<HttpParameter> paramList = paramMapToArray(params);
+        paramList.add(new HttpParameter("user_id", String.valueOf(userId)));
+        return factory.createUser(get(conf.getRestBaseURL() + "users/show.json", paramList.toArray(new HttpParameter[paramList.size()])));
+    }
+
+    @Override
+    public User showUserWithParams(String screenName, Map<String, String> params) throws TwitterException {
+        final List<HttpParameter> paramList = paramMapToArray(params);
+        paramList.add(new HttpParameter("screen_name", screenName));
+        return factory.createUser(get(conf.getRestBaseURL() + "users/show.json", paramList.toArray(new HttpParameter[paramList.size()])));
     }
 
     @Override

@@ -16,10 +16,16 @@
 
 package twitter4j.api;
 
-import twitter4j.*;
+import twitter4j.AccountSettings;
+import twitter4j.IDs;
+import twitter4j.PagableResponseList;
+import twitter4j.ResponseList;
+import twitter4j.TwitterException;
+import twitter4j.User;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @author Joern Huxhorn - jhuxhorn at googlemail.com
@@ -362,6 +368,8 @@ public interface UsersResources {
      */
     User showUser(long userId) throws TwitterException;
 
+    User showUserWithParams(long userId, final Map<String, String> params) throws TwitterException;
+
     /**
      * Returns extended information of a given user, specified by ID or screen name as per the required id parameter. The author's most recent status will be returned inline.
      * <br>This method calls https://api.twitter.com/1.1/users/show.json
@@ -372,6 +380,8 @@ public interface UsersResources {
      * @see <a href="https://dev.twitter.com/docs/api/1.1/get/users/show">GET users/show | Twitter Developers</a>
      */
     User showUser(String screenName) throws TwitterException;
+
+    User showUserWithParams(String screenName, Map<String, String> params) throws TwitterException;
 
     /**
      * Run a search for users similar to the Find People button on Twitter.com; the same results returned by people search on Twitter.com will be returned by using this API.<br>
